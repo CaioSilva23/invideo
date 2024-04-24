@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  db:
+    container_name: auth_postgres
+    image: postgres:latest
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - pg_data_invideo:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    stdin_open: true
+    depends_on:
+      - db
+
+volumes:
+  pg_data_invideo: {}
